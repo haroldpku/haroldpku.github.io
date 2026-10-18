@@ -1,0 +1,143 @@
+/* 
+ * Anthropic-Inspired Theme 
+ * Colors: #FAF9F5 (Background), #141413 (Text primary), #B0AEA5 (Text secondary)
+ */
+
+:root {
+    --bg-color: #FAF9F5;
+    --text-primary: #141413;
+    --text-secondary: #5A5955;
+    --accent-color: #D97757; /* Anthropic Orange 强调色 */
+    --border-color: #E8E6DC;
+    
+    /* 字体：标题使用 Lora (衬线)，正文使用 Inter (非衬线) */
+    --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 720px;
+    margin: 80px auto;
+    padding: 0 24px;
+}
+
+/* 头部样式 */
+header {
+    margin-bottom: 64px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 40px;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-serif);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 3rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px 0;
+}
+
+.subtitle {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-top: 0;
+    font-weight: 400;
+}
+
+.bio {
+    font-size: 1.05rem;
+    margin-top: 24px;
+    color: var(--text-primary);
+    line-height: 1.7;
+}
+
+.links {
+    margin-top: 24px;
+    display: flex;
+    gap: 20px;
+}
+
+.links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.links a:hover {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--text-primary);
+}
+
+/* 学术成果区 */
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 32px;
+}
+
+.pub-item {
+    margin-bottom: 32px;
+}
+
+.pub-title {
+    font-size: 1.2rem;
+    margin: 0 0 6px 0;
+    line-height: 1.4;
+}
+
+.pub-authors {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.pub-venue {
+    margin: 4px 0 0 0;
+    font-size: 0.95rem;
+}
+
+.highlight {
+    color: var(--accent-color);
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin-left: 8px;
+}
+
+.more-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+}
+
+.more-link:hover {
+    border-color: var(--text-primary);
+}
+
+/* 底部 */
+footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
