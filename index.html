@@ -1,71 +1,517 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hao Wang | Researcher & Engineer</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- 引入类似 Anthropic 风格的 Google 字体 -->
+    <title>王皓 (Hao Wang) | 高级副总裁、研究员</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #FAF9F5;
+            --text-primary: #141413;
+            --text-secondary: #5A5955;
+            --accent-color: #D97757;
+            --border-color: #E8E6DC;
+            --bg-panel: #F3F1EA;
+            
+            --font-serif: 'Lora', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 顶部语言切换 */
+        .lang-toggle {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            z-index: 100;
+            cursor: pointer;
+        }
+        .lang-toggle .active {
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--text-primary);
+        }
+
+        .layout-wrapper {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .layout-wrapper.panel-open {
+            transform: translateX(-30vw); 
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            box-sizing: border-box;
+        }
+
+        header { margin-bottom: 64px; }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            letter-spacing: -0.02em;
+            margin: 0 0 8px 0;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 0;
+        }
+        .bio {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-top: 24px;
+        }
+
+        .section { margin-bottom: 56px; }
+
+        .section h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .section-intro {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* 交互区块 */
+        .interactive-block {
+            padding: 16px;
+            margin: 0 -16px 16px -16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .interactive-block:not(.no-hover) {
+            cursor: pointer;
+        }
+
+        /* 左侧星号提示符号 */
+        .interactive-block:not(.no-hover)::before {
+            content: "✦";
+            position: absolute;
+            left: -20px;
+            top: 18px;
+            color: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translateX(10px);
+            font-size: 0.8rem;
+        }
+
+        .interactive-block:not(.no-hover):hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .interactive-block:not(.no-hover):hover {
+            background-color: rgba(217, 119, 87, 0.03);
+            border-color: rgba(217, 119, 87, 0.15);
+        }
+
+        .interactive-block.active {
+            background-color: #F3F1EA;
+            border-color: var(--border-color);
+        }
+        .interactive-block.active::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .interactive-block h3 {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        /* 英文论文名独立样式 */
+        .interactive-block .eng-title {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+        .block-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0 0 8px 0;
+        }
+        .block-desc {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .impact-note {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            margin: 8px 0 0 0;
+            font-weight: 500;
+        }
+
+        /* 荣誉列表 (非交互) */
+        .honor-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .honor-list li {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .honor-list li:last-child {
+            border-bottom: none;
+        }
+        .honor-list li span {
+            float: right;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 右侧侧边栏 */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: -40vw; 
+            width: 40vw;
+            height: 100vh;
+            background-color: var(--bg-panel);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.02);
+            box-sizing: border-box;
+            padding: 80px 60px;
+            transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .layout-wrapper.panel-open .side-panel { right: 0; }
+
+        .close-btn {
+            position: absolute;
+            top: 32px;
+            right: 40px;
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: var(--text-primary); }
+
+        .side-tag {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin-bottom: 16px;
+        }
+
+        .side-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            margin: 0 0 24px 0;
+        }
+
+        .side-text {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            min-height: 200px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 6px;
+            height: 1em;
+            background-color: var(--accent-color);
+            vertical-align: middle;
+            margin-left: 4px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            padding-bottom: 60px;
+        }
+
+        @media (max-width: 900px) {
+            .layout-wrapper.panel-open { transform: translateX(0); }
+            .side-panel {
+                width: 100vw;
+                right: -100vw;
+                padding: 60px 32px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 头部信息 -->
-        <header>
-            <h1>Hao Wang</h1>
-            <p class="subtitle">Researcher / Engineer</p>
-            <p class="bio">
-                Ph.D. from Peking University (2017). Currently at Huawei. My research interests span across <strong>Pervasive Computing, Wi-Fi Sensing, Mobile Sensing, Operating Systems, and Communication</strong>. 
-                I focus on building intelligent, real-time sensing systems and optimizing large-scale transport networks for mobile applications.
-            </p>
-            <div class="links">
-                <a href="mailto:your.email@example.com">Email</a>
-                <a href="https://scholar.google.com/citations?user=VCaVjYkAAAAJ&hl=en" target="_blank">Google Scholar</a>
-                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
-            </div>
-        </header>
-
-        <!-- 选定发表论文区 -->
-        <section class="publications">
-            <h2>Selected Publications</h2>
-            
-            <div class="pub-item">
-                <h3 class="pub-title">Experience: A three-year retrospective of large-scale multipath transport deployment for mobile applications</h3>
-                <p class="pub-authors">C Wang, <strong>H Wang</strong>, F Qian, K Zheng, C Wang, F Mao, X Guo, C Xu</p>
-                <p class="pub-venue"><em>MobiCom</em> (Proceedings of the 29th Annual International Conference on Mobile Computing and Networking), 2023</p>
-            </div>
-
-            <div class="pub-item">
-                <h3 class="pub-title">RT-Fall: A real-time and contactless fall detection system with commodity WiFi devices</h3>
-                <p class="pub-authors"><strong>H Wang</strong>, D Zhang, Y Wang, J Ma, Y Wang, S Li</p>
-                <p class="pub-venue"><em>IEEE Transactions on Mobile Computing</em>, 2016 <span class="highlight">[Cited by 790+]</span></p>
-            </div>
-
-            <div class="pub-item">
-                <h3 class="pub-title">Human respiration detection with commodity WiFi devices: Do user location and body orientation matter?</h3>
-                <p class="pub-authors"><strong>H Wang</strong>, D Zhang, J Ma, Y Wang, Y Wang, D Wu, T Gu, B Xie</p>
-                <p class="pub-venue"><em>UbiComp</em>, 2016 <span class="highlight">[Cited by 620+]</span></p>
-            </div>
-
-            <div class="pub-item">
-                <h3 class="pub-title">Toward centimeter-scale human activity sensing with Wi-Fi signals</h3>
-                <p class="pub-authors">D Zhang, <strong>H Wang</strong>, D Wu</p>
-                <p class="pub-venue"><em>Computer</em>, 2017</p>
-            </div>
-            
-            <div class="pub-item">
-                <h3 class="pub-title">WiDir: Walking direction estimation using wireless signals</h3>
-                <p class="pub-authors">D Wu, D Zhang, C Xu, Y Wang, <strong>H Wang</strong></p>
-                <p class="pub-venue"><em>UbiComp</em>, 2016</p>
-            </div>
-            
-            <a class="more-link" href="https://scholar.google.com/citations?user=VCaVjYkAAAAJ&hl=en" target="_blank">View all publications on Google Scholar →</a>
-        </section>
-
-        <!-- 底部版权 -->
-        <footer>
-            <p>© 2026 Hao Wang. Last updated: <script>document.write(new Date().getFullYear())</script>.</p>
-        </footer>
+    
+    <!-- 语言切换 (UI层，功能在加入英文版后完善) -->
+    <div class="lang-toggle">
+        <span class="active">中文</span> / <span>EN</span>
     </div>
+
+    <div class="layout-wrapper" id="layout-wrapper">
+        
+        <!-- 左侧主内容区 -->
+        <main class="main-content">
+            <header>
+                <h1>王皓</h1>
+                <p class="subtitle">高级副总裁、研发总裁 @ 深开鸿</p>
+                <p class="bio">
+                    北京大学博士。致力于操作系统、泛在计算（Pervasive Computing）与 Wi-Fi 传感的前沿研究与工业落地。曾从0到1主导鸿蒙分布式软总线、LinkTurbo 等核心技术研发，相关技术已在 HarmonyOS 7亿+ 台设备上商用。拥有将顶级学术研究转化为十亿级工业产品的全栈经验。
+                </p>
+            </header>
+
+            <section class="section">
+                <h2>工作经历</h2>
+                
+                <div class="interactive-block" data-id="exp-skh">
+                    <div class="block-header">
+                        <h3>深开鸿</h3>
+                        <span class="date">2022.09 - 至今</span>
+                    </div>
+                    <p class="block-sub">高级副总裁、研发总裁</p>
+                    <p class="block-desc">全面负责操作系统及相关底层架构的研发业务。</p>
+                </div>
+
+                <div class="interactive-block" data-id="exp-huawei">
+                    <div class="block-header">
+                        <h3>华为技术有限公司</h3>
+                        <span class="date">2017.09 - 2022.09</span>
+                    </div>
+                    <p class="block-sub">终端产品 · 技术专家B</p>
+                    <p class="block-desc">主导鸿蒙关键网络与连接技术，获国家发明专利授权30余项（均为底层核心专利），入选华为公司十大发明。</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>代表成果与工业转化</h2>
+                <p class="section-intro">在 ACM UbiComp, ACM MobiCom, NSDI, IEEE TMC 等 CCF-A 类顶级学术会议及期刊发表论文10余篇，总被引 2400+ 次，多篇入选 ESI 计算机领域全球前1%高被引论文。</p>
+
+                <div class="interactive-block" data-id="pub-nsdi">
+                    <h3 class="eng-title">SMUFF: Towards Line Rate Wi-Fi Direct Transport with Orchestrated On-device Buffer Management</h3>
+                    <p class="block-sub">C Wang, H Wang, et al. | <em>NSDI 2024 (CCF-A)</em></p>
+                    <p class="impact-note">✦ 工业转化：鸿蒙分布式软总线关键技术竞争力，于 HarmonyOS 7亿+ 台设备商用。</p>
+                </div>
+
+                <div class="interactive-block" data-id="pub-mobicom">
+                    <h3 class="eng-title">Experience: A Three-Year Retrospective of Large-scale Multipath Transport Deployment for Mobile Applications</h3>
+                    <p class="block-sub">C Wang, H Wang, et al. | <em>ACM MobiCom 2023 (CCF-A)</em></p>
+                    <p class="impact-note">✦ 工业转化：华为终端网络聚合加速技术 (LinkTurbo)，华为终端10余个产品发布会 TOP 卖点，于 HarmonyOS 7亿+ 设备商用。</p>
+                </div>
+
+                <div class="interactive-block" data-id="pub-ubicomp">
+                    <h3 class="eng-title">Human respiration detection with commodity Wi-Fi devices: do user location and body orientation matter?</h3>
+                    <p class="block-sub">H Wang, D Zhang, et al. | <em>ACM UbiComp 2016 (CCF-A)</em></p>
+                    <p class="impact-note">✦ 学术影响：获 ACM UbiComp 十年影响力奖 | ESI 计算机领域前1%高被引 (被引565次)。</p>
+                </div>
+                
+                <div class="interactive-block" data-id="pub-tmc">
+                    <h3 class="eng-title">RT-Fall: A Real-time and Contactless Fall Detection System with Commodity WiFi Devices</h3>
+                    <p class="block-sub">H Wang, D Zhang, et al. | <em>IEEE TMC 2017 (CCF-A)</em></p>
+                    <p class="impact-note">✦ 学术影响：ESI 计算机领域前1%高被引 (被引727次)。</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>荣誉与奖项</h2>
+                <ul class="honor-list">
+                    <li><strong>CCF技术发明一等奖</strong>, 中国计算机学会 <span>(2025.10)</span></li>
+                    <li><strong>中国优秀软件工程师</strong>, 中国电子信息行业联合会 <span>(2024.10)</span></li>
+                    <li><strong>华为公司十大发明</strong> (第一发明人), 华为技术有限公司 <span>(2022.06)</span></li>
+                    <li><strong>华为公司金牌个人</strong>, 华为技术有限公司 <span>(2020.12)</span></li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>教育经历</h2>
+                
+                <div class="interactive-block" data-id="edu-phd">
+                    <div class="block-header">
+                        <h3>北京大学</h3>
+                        <span class="date">2013.09 - 2017.07</span>
+                    </div>
+                    <p class="block-sub">博士 | 软件工程</p>
+                </div>
+
+                <div class="interactive-block no-hover">
+                    <div class="block-header">
+                        <h3>北京大学</h3>
+                        <span class="date">2010.09 - 2013.07</span>
+                    </div>
+                    <p class="block-sub">硕士 | 软件工程</p>
+                </div>
+
+                <div class="interactive-block no-hover">
+                    <div class="block-header">
+                        <h3>西南大学</h3>
+                        <span class="date">2006.09 - 2010.07</span>
+                    </div>
+                    <p class="block-sub">本科 | 食品科学、金融学 双学位</p>
+                </div>
+            </section>
+            
+            <footer>
+                <p>© 2026 Hao Wang. 探究底层物理本质，构建亿级工业系统。</p>
+            </footer>
+        </main>
+
+        <!-- 右侧副页 -->
+        <aside class="side-panel" id="side-panel">
+            <button class="close-btn" id="close-btn" aria-label="关闭">&times;</button>
+            <div class="side-content">
+                <div class="side-tag">Behind the Scenes</div>
+                <h3 id="side-title" class="side-title"></h3>
+                <div id="side-text" class="side-text"></div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        const sidePanel = document.getElementById('side-panel');
+        const layoutWrapper = document.getElementById('layout-wrapper');
+        const closeBtn = document.getElementById('close-btn');
+        const sideTitle = document.getElementById('side-title');
+        const sideText = document.getElementById('side-text');
+        const interactiveBlocks = document.querySelectorAll('.interactive-block:not(.no-hover)');
+
+        let typeWriterTimeout = null;
+
+        // 预设的口语化、幕后故事文案 
+        const stories = {
+            'edu-phd': {
+                title: "关于读博的岁月",
+                content: "在北大的这几年，是我学术观塑造的关键期。当时我们每天泡在实验室，探讨如何用极简的Wi-Fi信号去捕捉极其微小的人体呼吸。从最初的模式识别，到后来提出基于菲涅尔模型的理论边界，这几年的系统性学术训练，奠定了我后来在工业界做任何工程落地时，始终坚持“探究底层物理本质”的习惯。"
+            },
+            'exp-huawei': {
+                title: "在华为的五年",
+                content: "这五年是我从“纯粹的学者”走向“底层架构师”的蜕变。当时带队从0到1去攻克鸿蒙的底层连接技术，压力极大。但最让我兴奋的，其实不是拿了30多项核心专利或者十大发明，而是看着自己推导的算法、写下的代码，最终跑在了7亿多台设备上。那种前沿技术真正服务于亿万用户的成就感，是工业界独有的浪漫。"
+            },
+            'exp-skh': {
+                title: "深开鸿的新远征",
+                content: "加入深开鸿对我来说是一次全新的远征。作为研发总裁，现在的视野不仅是单个技术的突破点，而是如何从顶层构筑整个开源操作系统的生态底座。相较于以前敲代码、推公式的时间，现在更多的是对系统架构演进、技术战略布局以及团队组织阵型的深度思考。"
+            },
+            'pub-nsdi': {
+                title: "攻克软总线壁垒",
+                content: "鸿蒙分布式软总线是打通万物互联的“主动脉”。在 NSDI 发表的这项技术，解决了设备间高吞吐、低延迟的数据传输瓶颈。这也是学术界与工业界紧密咬合的经典案例：问题从亿级并发场景中来，解法最终又回到了7亿台商用设备中去。"
+            },
+            'pub-mobicom': {
+                title: "网络能力逼近极限",
+                content: "这篇 MobiCom 是我们团队工程化能力的集中体现。当时的业界难题是如何在移动端优雅地处理多路径传输。我们硬是把手机底层的网络能力抠到了极致。后来看到媒体评价 LinkTurbo 技术“第一次真正把手机网络发挥到了极致”，那一刻觉得过去几年的死磕都值了。"
+            },
+            'pub-ubicomp': {
+                title: "十年一剑的验证",
+                content: "这篇文章证明了：即使是最不起眼的商用 Wi-Fi 设备，只要算法模型足够精妙，也能洞察厘米级的生命体征。拿到 ACM UbiComp 十年影响力大奖，是对当年实验室里无数个不眠之夜最好的回应。"
+            },
+            'pub-tmc': {
+                title: "非接触感知的突破",
+                content: "这是我们早期在 IEEE TMC 上发表的重要成果。我们希望技术不仅能跑出好数据，更能解决真实的社会痛点，比如老年人的意外跌倒。这篇论文获得了极高的引用，也让我坚定了做“有温度的系统研究”的决心。"
+            }
+        };
+
+        // 打字机流式输出效果
+        function typeWriter(text, index, element) {
+            if (index < text.length) {
+                element.innerHTML += text.charAt(index);
+                index++;
+                // 随机延迟，模拟真人思考和打字的节奏
+                let delay = Math.random() * 30 + 15; 
+                if (text.charAt(index - 1) === '。' || text.charAt(index - 1) === '，') {
+                    delay += 150; // 遇到标点符号稍微停顿
+                }
+                typeWriterTimeout = setTimeout(() => typeWriter(text, index, element), delay);
+            } else {
+                element.innerHTML += '<span class="cursor"></span>';
+            }
+        }
+
+        // 绑定点击事件
+        interactiveBlocks.forEach(block => {
+            block.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const story = stories[id];
+
+                if (story) {
+                    interactiveBlocks.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    layoutWrapper.classList.add('panel-open');
+                    
+                    if(typeWriterTimeout) clearTimeout(typeWriterTimeout);
+                    sideTitle.innerHTML = '';
+                    sideText.innerHTML = '';
+
+                    setTimeout(() => {
+                        sideTitle.innerText = story.title;
+                        typeWriter(story.content, 0, sideText);
+                    }, 300);
+                }
+            });
+        });
+
+        // 关闭右侧面板
+        closeBtn.addEventListener('click', () => {
+            layoutWrapper.classList.remove('panel-open');
+            interactiveBlocks.forEach(b => b.classList.remove('active'));
+            if(typeWriterTimeout) clearTimeout(typeWriterTimeout);
+        });
+    </script>
 </body>
 </html>
