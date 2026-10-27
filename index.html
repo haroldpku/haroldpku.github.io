@@ -43,6 +43,7 @@
             color: var(--text-primary);
             border-bottom: 1px solid var(--text-primary);
         }
+        .lang-toggle span:hover { color: var(--text-primary); }
 
         .layout-wrapper {
             display: flex;
@@ -351,9 +352,9 @@
 </head>
 <body>
     
-    <!-- 语言切换 (UI层，功能在加入英文版后完善) -->
+    <!-- 语言切换 -->
     <div class="lang-toggle">
-        <span class="active">中文</span> / <span>EN</span>
+        <span id="lang-zh" class="active">中文</span> / <span id="lang-en">EN</span>
     </div>
 
     <div class="layout-wrapper" id="layout-wrapper">
@@ -522,14 +523,47 @@
             }
         };
 
+        // 英文版幕后故事
+        const storiesEn = {
+            'edu-phd': {
+                title: "On My PhD Years",
+                content: "My years at Peking University shaped my academic worldview. We spent our days in the lab exploring how minimal Wi-Fi signals could capture the faintest human breathing. From early pattern recognition to deriving theoretical bounds with the Fresnel model, that systematic training instilled a habit I still carry in industry: always dig into the underlying physical nature of the problem."
+            },
+            'exp-huawei': {
+                title: "Five Years at Huawei",
+                content: "Those five years were my transformation from a pure researcher into a systems architect. Leading a team from zero to one on HarmonyOS's underlying connectivity technologies came with enormous pressure. But what excites me most is not the 30+ core patents or the Top 10 Invention award; it is watching the algorithms I derived and the code I wrote running on over 700 million devices. Seeing frontier technology truly serve billions of users is a romance unique to industry."
+            },
+            'exp-skh': {
+                title: "A New Expedition at Kaihong",
+                content: "Joining Shenzhen Kaihong was a brand-new expedition. As President of R&D, my horizon is no longer a single technical breakthrough, but how to build the ecosystem foundation of an entire open-source operating system from the top down. Compared with the days of writing code and deriving formulas, my time now goes to deep thinking about system architecture evolution, technology strategy, and team organization."
+            },
+            'pub-nsdi': {
+                title: "Breaking the Soft-Bus Barrier",
+                content: "The HarmonyOS distributed soft bus is the 'aorta' of the Internet of Everything. The work we published at NSDI removed the bottleneck of high-throughput, low-latency data transfer between devices. It is a classic case of academia and industry interlocking: the problem came from scenarios with hundreds of millions of concurrent connections, and the solution went back into 700 million commercial devices."
+            },
+            'pub-mobicom': {
+                title: "Pushing Networks to Their Limits",
+                content: "This MobiCom paper epitomizes our team's engineering capability. The industry-wide challenge was how to elegantly handle multipath transport on mobile devices, and we squeezed every last bit of capability out of the phone's network stack. When media later described LinkTurbo as 'the first technology to truly push smartphone networking to its extreme,' I felt all those years of relentless work had paid off."
+            },
+            'pub-ubicomp': {
+                title: "A Decade-Long Validation",
+                content: "This paper proved that even the most unremarkable commodity Wi-Fi devices, paired with sufficiently refined models, can sense centimeter-level vital signs. Receiving the ACM UbiComp 10-Year Impact Award is the finest answer to the countless sleepless nights we spent in the lab back then."
+            },
+            'pub-tmc': {
+                title: "A Breakthrough in Contactless Sensing",
+                content: "This was one of our early landmark results in IEEE TMC. We wanted technology that not only produced good numbers but also solved real social pain points, such as accidental falls among the elderly. The paper has been highly cited, and it strengthened my resolve to pursue systems research with warmth."
+            }
+        };
+
         // 打字机流式输出效果
         function typeWriter(text, index, element) {
             if (index < text.length) {
                 element.innerHTML += text.charAt(index);
                 index++;
                 // 随机延迟，模拟真人思考和打字的节奏
-                let delay = Math.random() * 30 + 15; 
-                if (text.charAt(index - 1) === '。' || text.charAt(index - 1) === '，') {
+                let delay = Math.random() * 30 + 15;
+                const ch = text.charAt(index - 1);
+                if (ch === '。' || ch === '，' || ch === '.' || ch === ',') {
                     delay += 150; // 遇到标点符号稍微停顿
                 }
                 typeWriterTimeout = setTimeout(() => typeWriter(text, index, element), delay);
@@ -543,26 +577,31 @@
             link.addEventListener('click', e => e.stopPropagation());
         });
 
+        // 按当前语言渲染侧边栏故事
+        function renderStory(id) {
+            activeStoryId = id;
+            const story = (currentLang === 'en' ? storiesEn : stories)[id];
+            if (!story) return;
+
+            layoutWrapper.classList.add('panel-open');
+            if (typeWriterTimeout) clearTimeout(typeWriterTimeout);
+            sideTitle.innerHTML = '';
+            sideText.innerHTML = '';
+
+            setTimeout(() => {
+                sideTitle.innerText = story.title;
+                typeWriter(story.content, 0, sideText);
+            }, 300);
+        }
+
         // 绑定点击事件
         interactiveBlocks.forEach(block => {
             block.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                const story = stories[id];
-
-                if (story) {
+                if (stories[id]) {
                     interactiveBlocks.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-
-                    layoutWrapper.classList.add('panel-open');
-                    
-                    if(typeWriterTimeout) clearTimeout(typeWriterTimeout);
-                    sideTitle.innerHTML = '';
-                    sideText.innerHTML = '';
-
-                    setTimeout(() => {
-                        sideTitle.innerText = story.title;
-                        typeWriter(story.content, 0, sideText);
-                    }, 300);
+                    renderStory(id);
                 }
             });
         });
@@ -571,8 +610,90 @@
         closeBtn.addEventListener('click', () => {
             layoutWrapper.classList.remove('panel-open');
             interactiveBlocks.forEach(b => b.classList.remove('active'));
+            activeStoryId = null;
             if(typeWriterTimeout) clearTimeout(typeWriterTimeout);
         });
+
+        // ===== 中英双语切换 =====
+        const langZhSpan = document.getElementById('lang-zh');
+        const langEnSpan = document.getElementById('lang-en');
+        let currentLang = 'zh';
+        let activeStoryId = null;
+
+        // 中文为页面默认内容，加载时从 DOM 快照；英文版本在此字典中维护
+        const i18nTargets = [
+            { sel: 'header h1', en: "Hao Wang, Ph.D." },
+            { sel: 'header .subtitle', en: "Senior Vice President & President of R&D, Shenzhen Kaihong Digital Industry Development Co., Ltd." },
+            { sel: 'header .bio', en: "Dr. Hao Wang received his Ph.D. from Peking University in 2017, majoring in Computer Software and Theory. From 2017 to 2022 at Huawei, he worked on engineering architecture and technical innovation for terminal operating system networking and communication, initiating and leading the development and continuous evolution of core HarmonyOS technologies such as LinkTurbo (network aggregation acceleration) and the HarmonyOS distributed soft bus. Since 2022, he has led the R&D organization at Shenzhen Kaihong Digital Industry Development Co., Ltd., directing the development of KaihongOS, an industry-grade HarmonyOS distribution built on OpenHarmony. He has published over 10 papers in top international journals, conferences, and magazines including ACM MobiCom, ACM UbiComp, IEEE TMC, IEEE Computer, IEEE Communications, and Patterns, and holds over 40 granted domestic and international invention patents. His work has been commercially deployed on over 900 million devices, and has been recognized with the Huawei 2021 (4th) Top 10 Inventions<a class='ref-link' href='https://www.huawei.com/cn/ipr' target='_blank' rel='noopener' title='Huawei Top 10 Inventions: LinkTurbo & Memory Expansion'>↗</a>, the 2024 China Outstanding Software Engineer award, the CCF 2025 Technical Invention Award (First Prize)<a class='ref-link' href='https://www.ccf.org.cn/Awardsnew/lnhjmd/2025/ccfkxjsj/ccfkjcgj/' target='_blank' rel='noopener' title='CCF Technical Invention Award: High-Performance Interconnection for Mobile IoT'>↗</a>, and the ACM UbiComp 2026 10-Year Impact Award<a class='ref-link' href='https://www.ubicomp.org/ubicomp-iswc-2026/awards-all/' target='_blank' rel='noopener' title='UbiComp 10-Year Impact Award'>↗</a>." },
+            { sel: '.section h2', en: ["Work Experience", "Selected Publications", "Honors & Awards", "Education"] },
+            { sel: '.section-intro', en: "Over 10 papers in top international journals, conferences, and magazines such as ACM MobiCom, ACM UbiComp, IEEE TMC, IEEE Computer, IEEE Communications, and Patterns, with 2,800+ citations in total." },
+            { sel: '[data-id="exp-skh"] h3', en: "Shenzhen Kaihong Digital Industry Development Co., Ltd." },
+            { sel: '[data-id="exp-skh"] .date', en: "2022.09 - Present" },
+            { sel: '[data-id="exp-skh"] .block-sub', en: "Senior Vice President & President of R&D" },
+            { sel: '[data-id="exp-skh"] .block-desc', en: "Fully responsible for the R&D of operating systems and underlying architectures." },
+            { sel: '[data-id="exp-huawei"] h3', en: "Huawei Technologies Co., Ltd." },
+            { sel: '[data-id="exp-huawei"] .block-sub', en: "Consumer Business Group · Technical Expert B" },
+            { sel: '[data-id="exp-huawei"] .block-desc', en: "Engineering architecture and technical innovation for terminal operating system networking and communication technologies." },
+            { sel: '[data-id="pub-ubicomp"] p:nth-of-type(2)', en: "<em>ACM UbiComp 2016 (CCF-A)</em>, pp. 25–36 · Cited <b class='citation-num'>623</b> times" },
+            { sel: '[data-id="pub-tmc"] p:nth-of-type(2)', en: "<em>IEEE TMC 2017 (CCF-A)</em>, vol. 16, no. 2, pp. 511–526 · Cited <b class='citation-num'>798</b> times" },
+            { sel: '[data-id="pub-nsdi"] .impact-note', en: "✦ Brought Wi-Fi's nominal peak rate to real users (94.7%, up to 99% on Huawei phones), closing the end-to-end throughput problem." },
+            { sel: '[data-id="pub-mobicom"] .impact-note', en: "✦ A pure-software, billion-device-scale empirical study that stacks and fuses multiple network radios (Wi-Fi and cellular)." },
+            { sel: '[data-id="pub-ubicomp"] .impact-note', en: "✦ Introduced the optical Fresnel zone theory into wireless sensing, laying the theoretical foundation of Wi-Fi sensing | ACM UbiComp 10-Year Impact Award" },
+            { sel: '[data-id="pub-tmc"] .impact-note', en: "✦ Wi-Fi sensing fall detection in continuous real-world settings | ESI Top 1% Highly Cited Paper." },
+            { sel: '.honor-list li', en: [
+                "<strong>UbiComp 10-Year Impact Award</strong>, ACM UbiComp <span>(2026.10)</span>",
+                "<strong>CCF Technical Invention Award, First Prize</strong>, China Computer Federation <span>(2025.10)</span>",
+                "<strong>China Outstanding Software Engineer</strong>, China Information Technology Industry Federation <span>(2024.10)</span>",
+                "<strong>Huawei Top 10 Inventions</strong> (First Inventor), Huawei Technologies <span>(2022.06)</span>",
+                "<strong>Huawei Gold Medal Individual</strong>, Huawei Technologies <span>(2020.12)</span>"
+            ] },
+            { sel: '[data-id="edu-phd"] h3', en: "Peking University" },
+            { sel: '[data-id="edu-phd"] .block-sub', en: "Ph.D. | Software Engineering" },
+            { sel: '.interactive-block.no-hover h3', en: ["Peking University", "Southwest University"] },
+            { sel: '.interactive-block.no-hover .block-sub', en: ["M.S. | Software Engineering", "B.S. | Food Science & Finance (Dual Degree)"] },
+            { sel: 'footer p', en: "© 2026 Hao Wang. Systems engineering meets theoretical breakthroughs — striving for work with real impact." }
+        ];
+
+        // 快照当前 DOM 中的中文内容
+        i18nTargets.forEach(t => {
+            if (Array.isArray(t.en)) {
+                t.zh = Array.from(document.querySelectorAll(t.sel)).map(el => el.innerHTML);
+            } else {
+                const el = document.querySelector(t.sel);
+                if (el) t.zh = el.innerHTML;
+            }
+        });
+
+        function setLang(lang) {
+            currentLang = lang;
+            i18nTargets.forEach(t => {
+                const content = lang === 'en' ? t.en : t.zh;
+                if (Array.isArray(content)) {
+                    document.querySelectorAll(t.sel).forEach((el, i) => {
+                        if (content[i] !== undefined) el.innerHTML = content[i];
+                    });
+                } else {
+                    const el = document.querySelector(t.sel);
+                    if (el) el.innerHTML = content;
+                }
+            });
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+            document.title = lang === 'en'
+                ? "Hao Wang (王皓) | SVP & President of R&D, Kaihong"
+                : "王皓 (Hao Wang) | 高级副总裁、研究员";
+            langZhSpan.classList.toggle('active', lang === 'zh');
+            langEnSpan.classList.toggle('active', lang === 'en');
+            try { localStorage.setItem('lang', lang); } catch (e) {}
+            if (activeStoryId) renderStory(activeStoryId); // 侧边栏打开时同步切换故事语言
+        }
+
+        langZhSpan.addEventListener('click', () => setLang('zh'));
+        langEnSpan.addEventListener('click', () => setLang('en'));
+
+        // 记住访客上次选择的语言
+        try {
+            if (localStorage.getItem('lang') === 'en') setLang('en');
+        } catch (e) {}
     </script>
 </body>
 </html>
