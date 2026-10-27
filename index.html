@@ -65,6 +65,21 @@
 
         header { margin-bottom: 64px; }
 
+        /* 个人照片：圆形头像，低饱和处理以契合整体暖色系 */
+        .profile-photo {
+            float: right;
+            width: 148px;
+            height: 148px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 28%;
+            margin: 12px 0 24px 36px;
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            background-color: var(--bg-panel);
+            filter: saturate(0.15) contrast(1.02);
+        }
+
         h1 {
             font-family: var(--font-serif);
             font-size: 2.8rem;
@@ -296,6 +311,13 @@
                 right: -100vw;
                 padding: 60px 32px;
             }
+            .profile-photo {
+                float: none;
+                display: block;
+                width: 124px;
+                height: 124px;
+                margin: 0 0 20px 0;
+            }
         }
     </style>
 </head>
@@ -311,10 +333,11 @@
         <!-- 左侧主内容区 -->
         <main class="main-content">
             <header>
+                <img src="myphoto.jpg" alt="王皓" class="profile-photo">
                 <h1>王皓 博士</h1>
                 <p class="subtitle">深圳开鸿数字产业发展有限公司 高级副总裁、研发总裁</p>
                 <p class="bio">
-                    王皓于2017年获得北京大学博士学位，研究方向为计算机软件与理论。2017年至2022年在华为公司从事终端操作系统网络与通信技术的工程架构与技术创新，参与主导了鸿蒙网络聚合加速技术 LinkTurbo、鸿蒙分布式软总线等鸿蒙操作系统核心技术的立项、研发和持续演进；2022年至今在深圳开鸿数字产业发展有限公司担任公司研发负责人，主导了基于开源鸿蒙的行业鸿蒙发行版操作系统KaihongOS的研发工作。在ACM Mobicom，ACM Ubicomp，IEEE TMC，IEEE Computer，IEEE Communications，Patterns等顶级国际期刊/会议/杂志发表论文10余篇，发明专利30余项，这些工作已经在超过9亿台终端产品商用至今，并入选华为2021第四届十大发明、中国计算机学会CCF2025技术发明一等奖、ACM Ubicom2026十年最具影响力论文奖等。
+                    王皓于2017年获得北京大学博士学位，研究方向为计算机软件与理论。2017年至2022年在华为公司从事终端操作系统网络与通信技术的工程架构与技术创新，参与主导了鸿蒙网络聚合加速技术 LinkTurbo、鸿蒙分布式软总线等鸿蒙操作系统核心技术的立项、研发和持续演进；2022年至今在深圳开鸿数字产业发展有限公司担任公司研发负责人，主导了基于开源鸿蒙的行业鸿蒙发行版操作系统KaihongOS的研发工作。在ACM Mobicom，ACM Ubicomp，IEEE TMC，IEEE Computer，IEEE Communications，Patterns等顶级国际期刊/会议/杂志发表论文10余篇，发明专利40余项，这些工作已经在超过9亿台终端产品商用至今，并入选华为2021第四届十大发明、中国计算机学会CCF2025技术发明一等奖、ACM Ubicom2026十年最具影响力论文奖等。
                 </p>
             </header>
 
@@ -323,7 +346,7 @@
                 
                 <div class="interactive-block" data-id="exp-skh">
                     <div class="block-header">
-                        <h3>深开鸿</h3>
+                        <h3>深圳开鸿数字产业发展有限公司</h3>
                         <span class="date">2022.09 - 至今</span>
                     </div>
                     <p class="block-sub">高级副总裁、研发总裁</p>
