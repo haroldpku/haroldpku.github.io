@@ -203,6 +203,23 @@
             font-weight: 500;
         }
 
+        /* 论文标题旁的 PDF 全文链接图标 */
+        .pdf-link {
+            display: inline-block;
+            vertical-align: 1px;
+            margin-left: 8px;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+        .pdf-link:hover { color: var(--accent-color); }
+        .pdf-link svg { width: 15px; height: 15px; display: block; }
+
+        /* 引用次数 */
+        .citation-num {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
         /* 荣誉列表 (非交互) */
         .honor-list {
             list-style: none;
@@ -337,7 +354,7 @@
                 <h1>王皓 博士</h1>
                 <p class="subtitle">深圳开鸿数字产业发展有限公司 高级副总裁、研发总裁</p>
                 <p class="bio">
-                    王皓于2017年获得北京大学博士学位，研究方向为计算机软件与理论。2017年至2022年在华为公司从事终端操作系统网络与通信技术的工程架构与技术创新，参与主导了鸿蒙网络聚合加速技术 LinkTurbo、鸿蒙分布式软总线等鸿蒙操作系统核心技术的立项、研发和持续演进；2022年至今在深圳开鸿数字产业发展有限公司担任公司研发负责人，主导了基于开源鸿蒙的行业鸿蒙发行版操作系统KaihongOS的研发工作。在ACM Mobicom，ACM Ubicomp，IEEE TMC，IEEE Computer，IEEE Communications，Patterns等顶级国际期刊/会议/杂志发表论文10余篇，发明专利40余项，这些工作已经在超过9亿台终端产品商用至今，并入选华为2021第四届十大发明、中国计算机学会CCF2025技术发明一等奖、ACM Ubicom2026十年最具影响力论文奖等。
+                    王皓于2017年获得北京大学博士学位，研究方向为计算机软件与理论。2017年至2022年在华为公司从事终端操作系统网络与通信技术的工程架构与技术创新，参与主导了鸿蒙网络聚合加速技术 LinkTurbo、鸿蒙分布式软总线等鸿蒙操作系统核心技术的立项、研发和持续演进；2022年至今在深圳开鸿数字产业发展有限公司担任公司研发负责人，主导了基于开源鸿蒙的行业鸿蒙发行版操作系统KaihongOS的研发工作。在ACM Mobicom，ACM Ubicomp，IEEE TMC，IEEE Computer，IEEE Communications，Patterns等顶级国际期刊/会议/杂志发表论文10余篇，授权国内/国际发明专利40余项，这些工作已经在超过9亿台终端产品商用至今，并入选华为2021第四届十大发明、中国计算机学会CCF2025技术发明一等奖、ACM Ubicom2026十年最具影响力论文奖等。
                 </p>
             </header>
 
@@ -368,26 +385,30 @@
                 <p class="section-intro">ACM Mobicom，ACM Ubicomp，IEEE TMC，IEEE Computer，IEEE Communications，Patterns等顶级国际期刊/会议/杂志发表论文10余篇，总被引 2800+ 次。</p>
 
                 <div class="interactive-block" data-id="pub-nsdi">
-                    <h3 class="eng-title">SMUFF: Towards Line Rate Wi-Fi Direct Transport with Orchestrated On-device Buffer Management</h3>
-                    <p class="block-sub">C Wang, H Wang, et al. | <em>NSDI 2024 (CCF-A)</em></p>
+                    <h3 class="eng-title">SMUFF: Towards Line Rate Wi-Fi Direct Transport with Orchestrated On-device Buffer Management<a class="pdf-link" href="papers/smuff-nsdi24.pdf" title="打开论文全文（新标签页）" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></h3>
+                    <p class="block-sub">Chengke Wang, <b>Hao Wang</b>, Yuhan Zhou, Yunzhe Ni, Feng Qian, Chenren Xu</p>
+                    <p class="block-sub"><em>NSDI 2024 (CCF-A)</em>, pp. 1369–1383</p>
                     <p class="impact-note">✦ 让用户用上了WiFi标称的极限速率（94.7%，在华为手机达到99%），将端端传输的速率问题Close。</p>
                 </div>
 
                 <div class="interactive-block" data-id="pub-mobicom">
-                    <h3 class="eng-title">Experience: A Three-Year Retrospective of Large-scale Multipath Transport Deployment for Mobile Applications</h3>
-                    <p class="block-sub">C Wang, H Wang, et al. | <em>ACM MobiCom 2023 (CCF-A)</em></p>
+                    <h3 class="eng-title">Experience: A Three-Year Retrospective of Large-scale Multipath Transport Deployment for Mobile Applications<a class="pdf-link" href="papers/multipath-mobicom23.pdf" title="打开论文全文（新标签页）" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></h3>
+                    <p class="block-sub">Chengke Wang, <b>Hao Wang</b>, Feng Qian, Kai Zheng, Chenglu Wang, Fangzhu Mao, Xingmin Guo, Chenren Xu</p>
+                    <p class="block-sub"><em>ACM MobiCom 2023 (CCF-A)</em>, pp. 1–15</p>
                     <p class="impact-note">✦ 以纯软方案将多个网络模组（Wi-Fi和蜂窝）的能力堆叠融合的亿级别大规模实证算法研究。</p>
                 </div>
 
                 <div class="interactive-block" data-id="pub-ubicomp">
-                    <h3 class="eng-title">Human respiration detection with commodity Wi-Fi devices: do user location and body orientation matter?</h3>
-                    <p class="block-sub">H Wang, D Zhang, et al. | <em>ACM UbiComp 2016 (CCF-A)</em></p>
+                    <h3 class="eng-title">Human respiration detection with commodity Wi-Fi devices: do user location and body orientation matter?<a class="pdf-link" href="papers/respiration-ubicomp16.pdf" title="打开论文全文（新标签页）" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></h3>
+                    <p class="block-sub"><b>Hao Wang</b>, Daqing Zhang, Junyi Ma, Yasha Wang, Yuxiang Wang, Dan Wu, Tao Gu, Bing Xie</p>
+                    <p class="block-sub"><em>ACM UbiComp 2016 (CCF-A)</em>, pp. 25–36 · 被引 <b class="citation-num">623</b> 次</p>
                     <p class="impact-note">✦ 将光学菲涅尔区理论引入无线感知，奠定了Wi-Fi感知的理论基础 | ACM UbiComp 十年最具影响力论文奖</p>
                 </div>
-                
+
                 <div class="interactive-block" data-id="pub-tmc">
-                    <h3 class="eng-title">RT-Fall: A Real-time and Contactless Fall Detection System with Commodity WiFi Devices</h3>
-                    <p class="block-sub">H Wang, D Zhang, et al. | <em>IEEE TMC 2017 (CCF-A)</em></p>
+                    <h3 class="eng-title">RT-Fall: A Real-time and Contactless Fall Detection System with Commodity WiFi Devices<a class="pdf-link" href="papers/rtfall-tmc17.pdf" title="打开论文全文（新标签页）" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></h3>
+                    <p class="block-sub"><b>Hao Wang</b>, Daqing Zhang, Yasha Wang, Junyi Ma, Yuxiang Wang, Shengjie Li</p>
+                    <p class="block-sub"><em>IEEE TMC 2017 (CCF-A)</em>, vol. 16, no. 2, pp. 511–526 · 被引 <b class="citation-num">798</b> 次</p>
                     <p class="impact-note">✦ Wi-Fi感知连续真实场景下的跌倒检测系统工作 | ESI 世界计算机领域前1%高被引论文。</p>
                 </div>
             </section>
@@ -395,6 +416,7 @@
             <section class="section">
                 <h2>荣誉与奖项</h2>
                 <ul class="honor-list">
+                    <li><strong>UbiComp 10-Year Impact Award</strong>, ACM UbiComp <span>(2026.10)</span></li>
                     <li><strong>CCF技术发明一等奖</strong>, 中国计算机学会 <span>(2025.10)</span></li>
                     <li><strong>中国优秀软件工程师</strong>, 中国电子信息行业联合会 <span>(2024.10)</span></li>
                     <li><strong>华为公司十大发明</strong> (第一发明人), 华为技术有限公司 <span>(2022.06)</span></li>
@@ -504,6 +526,11 @@
                 element.innerHTML += '<span class="cursor"></span>';
             }
         }
+
+        // 点击 PDF 下载图标时不触发侧边栏
+        document.querySelectorAll('.pdf-link').forEach(link => {
+            link.addEventListener('click', e => e.stopPropagation());
+        });
 
         // 绑定点击事件
         interactiveBlocks.forEach(block => {
