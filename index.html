@@ -703,11 +703,15 @@
             var t0 = Date.now();
             var sent = 0; // 已上报的停留秒数（增量上报，重复触发无副作用）
 
-            // 浏览量
+            // 浏览量（带上来源渠道和当前语言版本）
             try {
                 fetch(ENDPOINT, {
                     method: 'POST',
-                    body: JSON.stringify({ type: 'pv' }),
+                    body: JSON.stringify({
+                        type: 'pv',
+                        ref: document.referrer || '',
+                        lang: document.documentElement.lang === 'en' ? 'en' : 'zh'
+                    }),
                     keepalive: true,
                     mode: 'no-cors'
                 }).catch(function () {});
