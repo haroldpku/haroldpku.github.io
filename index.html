@@ -695,5 +695,43 @@
             if (localStorage.getItem('lang') === 'en') setLang('en');
         } catch (e) {}
     </script>
+
+    <!-- 私有访问统计上报：数据只进自己的 Cloudflare Worker，页面上无任何展示 -->
+    <script>
+        (function () {
+            var ENDPOINT = 'https://site-stats.china7.workers.dev/report';
+            var t0 = Date.now();
+            var sent = 0; // 已上报的停留秒数（增量上报，重复触发无副作用）
+
+            // 浏览量
+            try {
+                fetch(ENDPOINT, {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'pv' }),
+                    keepalive: true,
+                    mode: 'no-cors'
+                }).catch(function () {});
+            } catch (e) {}
+
+            // 停留时间：切后台或关闭页面时上报增量
+            function reportDwell() {
+                var total = Math.round((Date.now() - t0) / 1000);
+                var delta = total - sent;
+                if (delta >= 3) {
+                    sent = total;
+                    try {
+                        navigator.sendBeacon(ENDPOINT, new Blob(
+                            [JSON.stringify({ type: 'dwell', seconds: delta })],
+                            { type: 'text/plain' }
+                        ));
+                    } catch (e) {}
+                }
+            }
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) reportDwell();
+            });
+            window.addEventListener('pagehide', reportDwell);
+        })();
+    </script>
 </body>
 </html>
