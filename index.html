@@ -449,7 +449,7 @@
                 <div class="interactive-block no-hover" data-id="pat-http">
                     <div class="block-header">
                         <h3>一种HTTP请求传输方法及设备<a class="pdf-link" href="patents/CN202110183638.3.pdf" title="打开专利全文（新标签页）" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></h3>
-                        <span class="date">CN、JP、EP、ES、US</span>
+                        <span class="date">国家：CN/JP/EP/ES/US</span>
                     </div>
                     <p class="block-sub">授权发明 · CN202110183638.3 · 第一发明人</p>
                     <p class="impact-note">✦ 多CDN并行下载的重合区间数据一致性校验机制 | 华为2021第四届十大发明（鸿蒙网络聚合加速与内存扩展）</p>
@@ -458,7 +458,7 @@
                 <div class="interactive-block no-hover" data-id="pat-buffer">
                     <div class="block-header">
                         <h3>一种缓冲区管理方法及相关装置</h3>
-                        <span class="date">中国</span>
+                        <span class="date">国家：CN</span>
                     </div>
                     <p class="block-sub">授权发明 · CN202110832128.4 · 第一发明人</p>
                     <p class="impact-note">✦ 高速文件传输下的端侧缓冲区动态调整 | SMUFF 核心专利</p>
@@ -467,7 +467,7 @@
                 <div class="interactive-block no-hover" data-id="pat-conn">
                     <div class="block-header">
                         <h3>一种连接建立方法及终端设备</h3>
-                        <span class="date">中国</span>
+                        <span class="date">国家：CN/KR/USEP/AU/JP</span>
                     </div>
                     <p class="block-sub">授权发明 · CN201811593656.3 · 第一发明人</p>
                     <p class="impact-note">✦ 基于历史时延的多径连接建立策略 | LinkTurbo 核心专利</p>
@@ -476,19 +476,10 @@
                 <div class="interactive-block no-hover" data-id="pat-data">
                     <div class="block-header">
                         <h3>一种数据传输方法及电子设备</h3>
-                        <span class="date">中国</span>
+                        <span class="date">国家：CN/US/JP/EP</span>
                     </div>
                     <p class="block-sub">授权发明 · CN201910016807.7 · 第一发明人</p>
-                    <p class="impact-note">✦ Wi-Fi与蜂窝双路协同的数据传输调度 | LinkTurbo 核心专利</p>
-                </div>
-
-                <div class="interactive-block no-hover" data-id="pat-resp">
-                    <div class="block-header">
-                        <h3>呼吸检测方法、电子设备、存储介质及程序产品</h3>
-                        <span class="date">中国</span>
-                    </div>
-                    <p class="block-sub">授权发明 · CN202210771443.5</p>
-                    <p class="impact-note">✦ 基于分层信道状态信息的呼吸检测方法 | Wi-Fi 感知</p>
+                    <p class="impact-note">✦ 智能感知APP带宽需求/Wi-Fi与蜂窝双路协同的数据传输调度 | 华为2020CBG十大发明（LinkTurbo）</p>
                 </div>
             </section>
 
@@ -661,17 +652,20 @@
             }, 300);
         }
 
-        // 绑定点击事件
-        interactiveBlocks.forEach(block => {
-            block.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                if (stories[id]) {
-                    interactiveBlocks.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    renderStory(id);
-                }
+        // 绑定点击事件（侧边栏展开暂时禁用：改为 true 即可恢复）
+        const ENABLE_SIDE_PANEL = false;
+        if (ENABLE_SIDE_PANEL) {
+            interactiveBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    if (stories[id]) {
+                        interactiveBlocks.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        renderStory(id);
+                    }
+                });
             });
-        });
+        }
 
         // 关闭右侧面板
         closeBtn.addEventListener('click', () => {
